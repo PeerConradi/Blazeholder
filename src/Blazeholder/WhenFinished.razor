@@ -1,0 +1,26 @@
+﻿@using System.Diagnostics
+@typeparam TTaskResult
+
+@if (state.TaskElement.IsCompleted && state.TaskElement.Exception == null)
+{
+    if (state.TaskElement is Task<TTaskResult> typedTask)
+    {
+        @ChildContent(typedTask.Result)
+    }
+}
+
+@code {
+    [CascadingParameter] private IBlazeholderState state { get; set; } = null!;
+
+    [Parameter] public RenderFragment<TTaskResult> ChildContent { get; set; } = default!;
+
+
+    protected override void OnParametersSet()
+    {
+        if (!state.TaskElement.IsCompleted)
+        {
+            state.TaskElement.ContinueWith((res) => InvokeAsync(StateHasChanged));
+        }
+    }
+
+}

@@ -1,0 +1,39 @@
+@implements IBlazeholderState
+
+<CascadingValue Value="(IBlazeholderState)this">
+    @ChildContent
+</CascadingValue>
+
+
+@code {
+    [Parameter] public bool AutoStart { get; set; } = true;
+
+    [Parameter] public RenderFragment ChildContent { get; set; } = default!;
+
+    private Task taskElement = Task.CompletedTask;
+    public Task TaskElement => taskElement;
+
+    public async Task SetTask(Task task)
+    {
+        if (taskElement == task)
+        {
+            return;
+        }
+        taskElement = task;
+
+        if (AutoStart && task.Status == TaskStatus.WaitingForActivation)
+        {
+            try
+            {
+                await task;
+            }
+            catch
+            {
+                // This should trigger the Exception View to work
+            }
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+}

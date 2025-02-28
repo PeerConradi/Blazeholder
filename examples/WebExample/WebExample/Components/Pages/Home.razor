@@ -1,0 +1,54 @@
+﻿@page "/"
+
+@rendermode InteractiveServer
+<PageTitle>Home</PageTitle>
+
+<h1>Demo</h1>
+
+<h2>Task that finishes after a few seconds</h2>
+
+<Blazeholder>
+    <BlazeholderTask>
+        <ResultTask Task="generateStringTask" />
+    </BlazeholderTask>
+    <WhenFinished TTaskResult="string">
+        <h4>@context</h4>
+        </WhenFinished>
+    <WhileLoading>
+        <h4>Loading...</h4>
+    </WhileLoading>
+    <OnError>
+        <h4>Error</h4>
+    </OnError>
+</Blazeholder>
+
+<h2>Task that failes</h2>
+
+<Blazeholder>
+    <BlazeholderTask>
+        <ResultTask Task="failingTask" />
+    </BlazeholderTask>
+    <WhenFinished TTaskResult="string">
+        <h4>@context</h4>
+    </WhenFinished>
+    <WhileLoading>
+        <h4>Loading...</h4>
+    </WhileLoading>
+    <OnError>
+        <h4>Error</h4>
+    </OnError>
+</Blazeholder>
+
+@code {
+    private Task<string> generateStringTask = Task.Run(async() => {
+
+        await Task.Delay(3000);
+        return "Hello, World!";
+    });
+
+    private Task<string> failingTask = Task.Run<string>(async () =>
+    {
+        await Task.Delay(3200);
+        throw new Exception("Ohhh noooooo!");
+    });
+}

@@ -1,0 +1,8 @@
+@ChildContent
+
+@code {
+    [CascadingParameter]
+    private IBlazeholderState? state { get; set; }
+
+    [Parameter] public RenderFragment ChildContent { get; set; } = default!;
+}

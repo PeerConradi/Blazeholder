@@ -1,0 +1,18 @@
+﻿@if (state.TaskElement.IsCompleted && state.TaskElement.IsFaulted)
+{
+    @ChildContent(state.TaskElement.Exception)
+}
+
+@code {
+    [CascadingParameter] private IBlazeholderState state { get; set; } = null!;
+
+    [Parameter] public RenderFragment<AggregateException?> ChildContent { get; set; } = default!;
+
+    protected override void OnParametersSet()
+    {
+        if (!state.TaskElement.IsCompleted)
+        {
+            state.TaskElement.ContinueWith((res) => InvokeAsync(StateHasChanged));
+        }
+    }
+}
