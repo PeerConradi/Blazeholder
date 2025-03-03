@@ -1,49 +1,26 @@
-name: Deploy WASM Demo
-
+name: Build and Deploy Docs
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - main  # Läuft bei Pushes auf den main-Branch
-
-  workflow_dispatch:  # Ermöglicht manuelles Ausführen des Workflows
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
+    branches: [ master ]
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-20.04
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '9.0.x'
-
-      - name: Publish Blazor WebAssembly
-        run: dotnet publish examples/WasmExample/WasmExample/WasmExample.csproj -c Release -o output --nologo
-
-      - name: Setup GitHub Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload to GitHub Pages
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: output/wwwroot
-
-  deploy:
-    needs: build-and-deploy
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 9.0.x
+        
+    - name: Publish with dotnet
+      run: dotnet publish -c Release -o public -p:GHPages=true 
+      working-directory: ./examples/WasmExample/WasmExample
+    - name: Deploy to Github Pages
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        BASE_BRANCH: master
+        BRANCH: gh-pages # The branch the action should deploy to.
+        FOLDER: examples/WasmExample/WasmExample/public/wwwroot # The folder the action should deploy.
+        CLEAN: true
