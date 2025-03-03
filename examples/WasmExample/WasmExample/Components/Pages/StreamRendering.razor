@@ -1,0 +1,38 @@
+﻿@page "/examples/streamrendering"
+@attribute [StreamRendering]
+
+<PageTitle>Weather</PageTitle>
+
+<h1>Weather</h1>
+
+<h3>Task that start and finishes</h3>
+@if (myTask != null)
+{
+    <Blazeholder AutoStart="false">
+        <BlazeholderTask>
+            <ResultTask Task="myTask" />
+        </BlazeholderTask>
+        <WhenFinished TTaskResult="string">
+            <h4>Generated Guid is @context</h4>
+        </WhenFinished>
+        <WhileLoading>
+            Waiting for Guid to be generated
+        </WhileLoading>
+    </Blazeholder>
+}
+
+@code {
+    private Task<string> myTask = default!;
+
+    private async Task<string> GenerateAGuid()
+    {
+        await Task.Delay(2000);
+        return Guid.NewGuid().ToString();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        myTask = GenerateAGuid();
+        await myTask;
+    }
+}

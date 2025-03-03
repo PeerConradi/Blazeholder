@@ -1,0 +1,43 @@
+﻿@page "/examples/progress"
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
+
+<h3>Progress examples</h3>
+<p>This example will take some time to generate numbers and will write steps into a local variable.</p>
+<Blazeholder>
+    <BlazeholderTask>
+        <ResultTask Task="myTask" />
+    </BlazeholderTask>
+    <WhileLoading>
+        <span>Progress: @progress</span>
+    </WhileLoading>
+    <WhenFinished TTaskResult="string">
+        <span>Task completed: @context</span>
+    </WhenFinished>
+</Blazeholder>
+
+@code {
+    private int progress;
+
+    private Task<string> GenerateSomeString()
+    {
+        return Task.Run(async () =>
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                // progress.Report(i);
+                progress = i;
+                await Task.Delay(500);
+                InvokeAsync(StateHasChanged);
+            }
+            return "Done!";
+        });
+    }
+
+    private Task<string> myTask = null!;
+
+    protected override void OnInitialized()
+    {
+        myTask = GenerateSomeString();
+        //myTask.Start();
+    }
+}

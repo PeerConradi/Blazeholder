@@ -1,0 +1,33 @@
+﻿@page "/examples/runandfinish"
+@rendermode InteractiveWebAssembly
+
+<h3>Task that start and finishes</h3>
+@if (myTask != null)
+{
+    <Blazeholder>
+        <BlazeholderTask>
+            <ResultTask Task="myTask" />
+        </BlazeholderTask>
+        <WhenFinished TTaskResult="string">
+            <h4>Generated Guid is @context</h4>
+        </WhenFinished>
+        <WhileLoading>
+            Waiting for Guid to be generated
+        </WhileLoading>
+    </Blazeholder>
+}
+
+@code {
+    private Task<string> myTask = default!;
+
+    private async Task<string> GenerateAGuid()
+    {
+        await Task.Delay(2000);
+        return Guid.NewGuid().ToString();
+    }
+
+    protected override void OnInitialized()
+    {
+        myTask = GenerateAGuid();
+    }
+}
