@@ -29,10 +29,10 @@ jobs:
         run: dotnet publish examples/WasmExample/WasmExample.csproj -c Release -o output --nologo
 
       - name: Setup GitHub Pages
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@v5
 
       - name: Upload to GitHub Pages
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: output/wwwroot
 
