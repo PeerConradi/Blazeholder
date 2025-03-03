@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Demos</title>
-    <base href="Blazeholder/" />
-    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/app.css" />
-    <link rel="icon" type="image/png" href="favicon.png" />
-    <link href="Demos.styles.css" rel="stylesheet" />
+    <base href="/" />
+    <link rel="stylesheet" href="Blazeholder/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="Blazeholder/css/app.css" />
+    <link rel="icon" type="Blazeholder/image/png" href="favicon.png" />
+    <link href="Blazeholder/Demos.styles.css" rel="stylesheet" />
 </head>
 
 <body class="leading-normal tracking-normal text-white gradient dark:bg-gray-800 language-bash line-numbers" style="font-family: 'Source Sans Pro', sans-serif;">
@@ -59,29 +59,8 @@
         <a class="dismiss">🗙</a>
     </div>
 
-    <script src="decode.js"></script>
-    <script src="_framework/blazor.webassembly.js" autostart="false"></script>
-    <script>
-        Blazor.start({
-            loadBootResource: function (type, name, defaultUri, integrity) {
-                if (type !== 'dotnetjs' && location.hostname !== 'localhost') {
-                    return (async function () {
-                        const response = await fetch(defaultUri + '.br',);
-                        if (!response.ok) {
-                            throw new Error(response.statusText);
-                        }
-                        const originalResponseBuffer = await response.arrayBuffer();
-                        const originalResponseArray = new Int8Array(originalResponseBuffer);
-                        const decompressedResponseArray = BrotliDecode(originalResponseArray);
-                        const contentType = type ===
-                            'dotnetwasm' ? 'application/wasm' : 'application/octet-stream';
-                        return new Response(decompressedResponseArray,
-                            { headers: { 'content-type': contentType } });
-                    })();
-                }
-            }
-        });
-    </script>
+    <!--<script src="decode.js"></script>-->
+    <script src="Blazeholder/_framework/blazor.webassembly.js"></script>
 </body>
 
 </html>
