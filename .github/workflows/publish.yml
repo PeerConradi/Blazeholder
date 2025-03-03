@@ -1,0 +1,33 @@
+name: Publish NuGet Package
+
+on:
+  push:
+    tags:
+      - 'v*'  # Läuft bei Tags wie v1.0.0, v1.1.0, etc.
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore src/Blazeholder/Blazeholder.csproj
+
+      - name: Build project
+        run: dotnet build src/Blazeholder/Blazeholder.csproj --configuration Release --no-restore
+
+      - name: Pack NuGet package
+        run: dotnet pack src/Blazeholder/Blazeholder.csproj --configuration Release --no-build --output nupkg
+
+      - name: Push to NuGet
+        run: dotnet nuget push nupkg/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
