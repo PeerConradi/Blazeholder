@@ -1,13 +1,19 @@
 name: Build and Deploy Docs
+
 on:
   workflow_dispatch:
   push:
     branches: [ master ]
+
+permissions:
+  contents: write  # <-- This grants the token permission to push changes
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+    
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
       with:
@@ -16,11 +22,11 @@ jobs:
     - name: Publish with dotnet
       run: dotnet publish -c Release -o public -p:GHPages=true 
       working-directory: ./examples/WasmExample/WasmExample
+
     - name: Deploy to Github Pages
-      uses: JamesIves/github-pages-deploy-action@releases/v3
+      uses: JamesIves/github-pages-deploy-action@v4  # Use latest stable version
       with:
-        ACCESS_TOKEN: ${{ secrets.DeployGHPages }}
-        BASE_BRANCH: master
-        BRANCH: gh-pages # The branch the action should deploy to.
-        FOLDER: examples/WasmExample/WasmExample/public/wwwroot # The folder the action should deploy.
+        TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the built-in GitHub Token
+        BRANCH: gh-pages
+        FOLDER: examples/WasmExample/WasmExample/public
         CLEAN: true
