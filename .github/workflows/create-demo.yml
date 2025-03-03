@@ -21,12 +21,12 @@ jobs:
         
     - name: Publish with dotnet
       run: dotnet publish -c Release -o public -p:GHPages=true 
-      working-directory: ./examples/WasmExample/WasmExample
+      working-directory: ./examples/Demos
 
     - name: Deploy to Github Pages
       uses: JamesIves/github-pages-deploy-action@v4  # Use latest stable version
       with:
         TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the built-in GitHub Token
         BRANCH: gh-pages
-        FOLDER: examples/WasmExample/WasmExample/public
+        FOLDER: examples/Demos/public
         CLEAN: true
