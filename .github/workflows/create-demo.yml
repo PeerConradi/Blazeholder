@@ -28,5 +28,5 @@ jobs:
       with:
         TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the built-in GitHub Token
         BRANCH: gh-pages
-        FOLDER: examples/Demos/public
+        FOLDER: examples/Demos/public/wwwroot
         CLEAN: true
