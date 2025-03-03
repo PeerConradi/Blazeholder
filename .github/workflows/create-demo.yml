@@ -26,7 +26,7 @@ jobs:
           dotnet-version: '9.0.x'
 
       - name: Publish Blazor WebAssembly
-        run: dotnet publish examples/WasmExample/WasmExample.csproj -c Release -o output --nologo
+        run: dotnet publish examples/WasmExample/WasmExample/WasmExample.csproj -c Release -o output --nologo
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
