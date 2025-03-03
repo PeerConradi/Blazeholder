@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
 
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
-	  <PackageReadmeFile>../../README.md</PackageReadmeFile>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
 	  <PackageProjectUrl>https://github.com/PeerConradi/Blazeholder</PackageProjectUrl>
 	  <RepositoryUrl>https://github.com/PeerConradi/Blazeholder.git</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
