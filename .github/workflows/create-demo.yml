@@ -1,32 +1,30 @@
-name: Build and Deploy Docs
+name: DeployDemoToGitHubPages
+env:
+  PUBLISH_DIR: examples/Demos/bin/Release/net9.0/publish/wwwroot
 
 on:
-  workflow_dispatch:
   push:
     branches: [ master ]
 
-permissions:
-  contents: write  # <-- This grants the token permission to push changes
-
 jobs:
-  deploy-demo:
-    runs-on: ubuntu-20.04
+  build:
+    name: Deploy Site to GitHub Pages
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 9.0.x
-        
-    - name: Publish with dotnet
-      run: dotnet publish -c Release -o public -p:GHPages=true 
-      working-directory: ./examples/Demos
+    - uses: actions/checkout@v4
 
-    - name: Deploy to Github Pages
-      uses: JamesIves/github-pages-deploy-action@v4  # Use latest stable version
+    - uses: actions/setup-dotnet@v4
       with:
-        TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the built-in GitHub Token
-        BRANCH: gh-pages
-        FOLDER: examples/Demos/public/wwwroot
-        CLEAN: true
+        dotnet-version: '9'
+
+    - name: Publish app
+      run: cd examples/Demos && dotnet publish -c Release
+
+    - name: GitHub Pages
+      if: success()
+      uses: crazy-max/ghaction-github-pages@v1.5.1
+      with:
+        target_branch: gh-pages
+        build_dir: ${{ env.PUBLISH_DIR }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
